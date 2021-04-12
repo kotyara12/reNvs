@@ -76,35 +76,35 @@ bool checkTimespan(time_t time, uint32_t timespan)
   return (t1 < t2) ? ((t0 >= t1) && (t0 < t2)) : !((t0 >= t2) && (t1 > t0));
 }
 
-char* value2string(const param_value_t type_value, void *value)
+char* value2string(const param_type_t type_value, void *value)
 {
   if (value) {
     switch (type_value) {
-      case OPT_VAL_I8:
+      case OPT_TYPE_I8:
         return malloc_stringf("%d", *(int8_t*)value);
-      case OPT_VAL_U8:
+      case OPT_TYPE_U8:
         return malloc_stringf("%d", *(uint8_t*)value);
-      case OPT_VAL_I16:
+      case OPT_TYPE_I16:
         return malloc_stringf("%d", *(int16_t*)value);
-      case OPT_VAL_U16:
+      case OPT_TYPE_U16:
         return malloc_stringf("%d", *(uint16_t*)value);
-      case OPT_VAL_I32:
+      case OPT_TYPE_I32:
         return malloc_stringf("%d", *(int32_t*)value);
-      case OPT_VAL_U32:
+      case OPT_TYPE_U32:
         return malloc_stringf("%d", *(uint32_t*)value);
-      case OPT_VAL_I64:
+      case OPT_TYPE_I64:
         return malloc_stringf("%d", *(int64_t*)value);
-      case OPT_VAL_U64:
+      case OPT_TYPE_U64:
         return malloc_stringf("%d", *(uint64_t*)value);
-      case OPT_VAL_FLOAT:
+      case OPT_TYPE_FLOAT:
         return malloc_stringf("%f", *(float*)value);
-      case OPT_VAL_DOUBLE:
+      case OPT_TYPE_DOUBLE:
         return malloc_stringf("%f", *(double*)value);
-      case OPT_VAL_STRING:
+      case OPT_TYPE_STRING:
         return strdup((char*)value);
-      case OPT_VAL_TIME:
+      case OPT_TYPE_TIME:
         return time2string(*(uint16_t*)value);;
-      case OPT_VAL_TIMESPAN:
+      case OPT_TYPE_TIMESPAN:
         return timespan2string(*(uint32_t*)value);
       default:
         return nullptr;
@@ -113,58 +113,58 @@ char* value2string(const param_value_t type_value, void *value)
   return nullptr;
 }
 
-void* string2value(const param_value_t type_value, char* str_value)
+void* string2value(const param_type_t type_value, char* str_value)
 {
   void* value = nullptr;
   switch (type_value) {
-    case OPT_VAL_I8:
+    case OPT_TYPE_I8:
       value = malloc(sizeof(int8_t));
       *(int8_t*)value = (int8_t)strtoimax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_U8:
+    case OPT_TYPE_U8:
       value = malloc(sizeof(uint8_t));
       *(uint8_t*)value = (uint8_t)strtoumax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_I16:
+    case OPT_TYPE_I16:
       value = malloc(sizeof(int16_t));
       *(int16_t*)value = (int16_t)strtoimax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_U16:
+    case OPT_TYPE_U16:
       value = malloc(sizeof(uint16_t));
       *(uint16_t*)value = (uint16_t)strtoumax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_I32:
+    case OPT_TYPE_I32:
       value = malloc(sizeof(int32_t));
       *(int32_t*)value = (int32_t)strtoimax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_U32:
+    case OPT_TYPE_U32:
       value = malloc(sizeof(uint32_t));
       *(uint32_t*)value = (uint32_t)strtoumax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_I64:
+    case OPT_TYPE_I64:
       value = malloc(sizeof(int64_t));
       *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_U64:
+    case OPT_TYPE_U64:
       value = malloc(sizeof(uint64_t));
       *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
       break;
-    case OPT_VAL_FLOAT:
+    case OPT_TYPE_FLOAT:
       value = malloc(sizeof(float));
       *(float*)value = (float)strtof(str_value, nullptr);
       break;
-    case OPT_VAL_DOUBLE:
+    case OPT_TYPE_DOUBLE:
       value = malloc(sizeof(double));
       *(double*)value = (double)strtod(str_value, nullptr);
       break;
-    case OPT_VAL_STRING:
+    case OPT_TYPE_STRING:
       value = strdup(str_value);
       break;
-    case OPT_VAL_TIME:
+    case OPT_TYPE_TIME:
       value = malloc(sizeof(uint16_t));
       *(uint16_t*)value = string2time(str_value);
       break;
-    case OPT_VAL_TIMESPAN:
+    case OPT_TYPE_TIMESPAN:
       value = malloc(sizeof(uint32_t));
       *(uint32_t*)value = string2timespan(str_value);
       break;
@@ -174,35 +174,35 @@ void* string2value(const param_value_t type_value, char* str_value)
   return value;
 }
 
-bool equal2value(const param_value_t type_value, void *value1, void *value2)
+bool equal2value(const param_type_t type_value, void *value1, void *value2)
 {
   if ((value1) && (value2)) {
     switch (type_value) {
-      case OPT_VAL_I8:
+      case OPT_TYPE_I8:
         return *(int8_t*)value1 == *(int8_t*)value2;
-      case OPT_VAL_U8:
+      case OPT_TYPE_U8:
         return *(uint8_t*)value1 == *(uint8_t*)value2;
-      case OPT_VAL_I16:
+      case OPT_TYPE_I16:
         return *(int16_t*)value1 == *(int16_t*)value2;
-      case OPT_VAL_U16:
+      case OPT_TYPE_U16:
         return *(uint16_t*)value1 == *(uint16_t*)value2;
-      case OPT_VAL_I32:
+      case OPT_TYPE_I32:
         return *(int32_t*)value1 == *(int32_t*)value2;
-      case OPT_VAL_U32:
+      case OPT_TYPE_U32:
         return *(uint32_t*)value1 == *(uint32_t*)value2;
-      case OPT_VAL_I64:
+      case OPT_TYPE_I64:
         return *(int64_t*)value1 == *(int64_t*)value2;
-      case OPT_VAL_U64:
+      case OPT_TYPE_U64:
         return *(uint64_t*)value1 == *(uint64_t*)value2;
-      case OPT_VAL_FLOAT:
+      case OPT_TYPE_FLOAT:
         return *(float*)value1 == *(float*)value2;
-      case OPT_VAL_DOUBLE:
+      case OPT_TYPE_DOUBLE:
         return *(double*)value1 == *(double*)value2;
-      case OPT_VAL_STRING:
+      case OPT_TYPE_STRING:
         return strcmp((char*)value1, (char*)value2) == 0;
-      case OPT_VAL_TIME:
+      case OPT_TYPE_TIME:
         return *(uint16_t*)value1 == *(uint16_t*)value2;
-      case OPT_VAL_TIMESPAN:
+      case OPT_TYPE_TIMESPAN:
         return *(uint32_t*)value1 == *(uint32_t*)value2;
       default:
         return false;
@@ -217,47 +217,47 @@ bool equal2value(const param_value_t type_value, void *value1, void *value2)
   };
 }
 
-void setNewValue(const param_value_t type_value, void *value1, void *value2)
+void setNewValue(const param_type_t type_value, void *value1, void *value2)
 {
   switch (type_value) {
-    case OPT_VAL_I8:
+    case OPT_TYPE_I8:
       *(int8_t*)value1 = *(int8_t*)value2;
       return;
-    case OPT_VAL_U8:
+    case OPT_TYPE_U8:
       *(uint8_t*)value1 = *(uint8_t*)value2;
       return;
-    case OPT_VAL_I16:
+    case OPT_TYPE_I16:
       *(int16_t*)value1 = *(int16_t*)value2;
       return;
-    case OPT_VAL_U16:
+    case OPT_TYPE_U16:
       *(uint16_t*)value1 = *(uint16_t*)value2;
       return;
-    case OPT_VAL_I32:
+    case OPT_TYPE_I32:
       *(int32_t*)value1 = *(int32_t*)value2;
       return;
-    case OPT_VAL_U32:
+    case OPT_TYPE_U32:
       *(uint32_t*)value1 = *(uint32_t*)value2;
       return;
-    case OPT_VAL_I64:
+    case OPT_TYPE_I64:
       *(int64_t*)value1 = *(int64_t*)value2;
       return;
-    case OPT_VAL_U64:
+    case OPT_TYPE_U64:
       *(uint64_t*)value1 = *(uint64_t*)value2;
       return;
-    case OPT_VAL_FLOAT:
+    case OPT_TYPE_FLOAT:
       *(float*)value1 = *(float*)value2;
       return;
-    case OPT_VAL_DOUBLE:
+    case OPT_TYPE_DOUBLE:
       *(double*)value1 = *(double*)value2;
       return;
-    case OPT_VAL_STRING:
+    case OPT_TYPE_STRING:
       if (value1) free(value1);
       value1 = strdup((char*)value2);
       return;
-    case OPT_VAL_TIME:
+    case OPT_TYPE_TIME:
       *(uint16_t*)value1 = *(uint16_t*)value2;
       return;
-    case OPT_VAL_TIMESPAN:
+    case OPT_TYPE_TIMESPAN:
       *(uint32_t*)value1 = *(uint32_t*)value2;
       return;
     default:
@@ -294,7 +294,7 @@ bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nv
   return true;
 }
 
-bool nvsRead(const char* name_group, const char* name_key, const param_value_t type_value, void * value)
+bool nvsRead(const char* name_group, const char* name_key, const param_type_t type_value, void * value)
 {
   nvs_handle_t nvs_handle;
   // Open NVS namespace
@@ -302,7 +302,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_value_t t
 
   // Read value
   esp_err_t err = ESP_OK;
-  if (type_value == OPT_VAL_STRING) {
+  if (type_value == OPT_TYPE_STRING) {
     // Get the size of the string that is in the storage
     size_t new_len = 0;
     err = nvs_get_str(nvs_handle, name_key, NULL, &new_len);
@@ -346,42 +346,42 @@ bool nvsRead(const char* name_group, const char* name_key, const param_value_t t
   } else {
     size_t data_len = 0;
     switch (type_value) {
-      case OPT_VAL_I8:
+      case OPT_TYPE_I8:
         err = nvs_get_i8(nvs_handle, name_key, (int8_t*)value);
         break;
-      case OPT_VAL_U8:
+      case OPT_TYPE_U8:
         err = nvs_get_u8(nvs_handle, name_key, (uint8_t*)value);
         break;
-      case OPT_VAL_I16:
+      case OPT_TYPE_I16:
         err = nvs_get_i16(nvs_handle, name_key, (int16_t*)value);
         break;
-      case OPT_VAL_U16:
+      case OPT_TYPE_U16:
         err = nvs_get_u16(nvs_handle, name_key, (uint16_t*)value);
         break;
-      case OPT_VAL_I32:
+      case OPT_TYPE_I32:
         err = nvs_get_i32(nvs_handle, name_key, (int32_t*)value);
         break;
-      case OPT_VAL_U32:
+      case OPT_TYPE_U32:
         err = nvs_get_u32(nvs_handle, name_key, (uint32_t*)value);
         break;
-      case OPT_VAL_I64:
+      case OPT_TYPE_I64:
         err = nvs_get_i64(nvs_handle, name_key, (int64_t*)value);
         break;
-      case OPT_VAL_U64:
+      case OPT_TYPE_U64:
         err = nvs_get_u64(nvs_handle, name_key, (uint64_t*)value);
         break;
-      case OPT_VAL_FLOAT:
+      case OPT_TYPE_FLOAT:
         data_len = sizeof(float);
         err = nvs_get_blob(nvs_handle, name_key, (float*)value, &data_len);
         break;
-      case OPT_VAL_DOUBLE:
+      case OPT_TYPE_DOUBLE:
         data_len = sizeof(double);
         err = nvs_get_blob(nvs_handle, name_key, (double*)value, &data_len);
         break;
-      case OPT_VAL_TIME:
+      case OPT_TYPE_TIME:
         err = nvs_get_u16(nvs_handle, name_key, (uint16_t*)value);
         break;
-      case OPT_VAL_TIMESPAN:
+      case OPT_TYPE_TIMESPAN:
         err = nvs_get_u32(nvs_handle, name_key, (uint32_t*)value);
         break;
       default:
@@ -407,7 +407,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_value_t t
   return (err == ESP_OK || err == ESP_ERR_NVS_NOT_FOUND);
 }
 
-bool nvsWrite(const char* name_group, const char* name_key, const param_value_t type_value, void * value)
+bool nvsWrite(const char* name_group, const char* name_key, const param_type_t type_value, void * value)
 {
   nvs_handle_t nvs_handle;
   // Open NVS namespace
@@ -416,43 +416,43 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_value_t 
   // Write value
   esp_err_t err = ESP_OK;
   switch (type_value) {
-    case OPT_VAL_I8:
+    case OPT_TYPE_I8:
       err = nvs_set_i8(nvs_handle, name_key, *(int8_t*)value);
       break;
-    case OPT_VAL_U8:
+    case OPT_TYPE_U8:
       err = nvs_set_u8(nvs_handle, name_key, *(uint8_t*)value);
       break;
-    case OPT_VAL_I16:
+    case OPT_TYPE_I16:
       err = nvs_set_i16(nvs_handle, name_key, *(int16_t*)value);
       break;
-    case OPT_VAL_U16:
+    case OPT_TYPE_U16:
       err = nvs_set_u16(nvs_handle, name_key, *(uint16_t*)value);
       break;
-    case OPT_VAL_I32:
+    case OPT_TYPE_I32:
       err = nvs_set_i32(nvs_handle, name_key, *(int32_t*)value);
       break;
-    case OPT_VAL_U32:
+    case OPT_TYPE_U32:
       err = nvs_set_u32(nvs_handle, name_key, *(uint32_t*)value);
       break;
-    case OPT_VAL_I64:
+    case OPT_TYPE_I64:
       err = nvs_set_i64(nvs_handle, name_key, *(int64_t*)value);
       break;
-    case OPT_VAL_U64:
+    case OPT_TYPE_U64:
       err = nvs_set_u64(nvs_handle, name_key, *(uint64_t*)value);
       break;
-    case OPT_VAL_FLOAT:
+    case OPT_TYPE_FLOAT:
       err = nvs_set_blob(nvs_handle, name_key, value, sizeof(float));
       break;
-    case OPT_VAL_DOUBLE:
+    case OPT_TYPE_DOUBLE:
       err = nvs_set_blob(nvs_handle, name_key, value, sizeof(double));
       break;
-    case OPT_VAL_STRING:
+    case OPT_TYPE_STRING:
       err = nvs_set_str(nvs_handle, name_key, (char*)value);
       break;
-    case OPT_VAL_TIME:
+    case OPT_TYPE_TIME:
       err = nvs_set_u16(nvs_handle, name_key, *(uint16_t*)value);
       break;
-    case OPT_VAL_TIMESPAN:
+    case OPT_TYPE_TIMESPAN:
       err = nvs_set_u32(nvs_handle, name_key, *(uint32_t*)value);
       break;
     default:
