@@ -1,5 +1,5 @@
 #include "rNvs32.h"
-#include "rEsp32.h"
+#include "rStrings.h"
 #include "project_config.h"
 #include <inttypes.h>
 #include <string.h>
