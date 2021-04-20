@@ -1,10 +1,10 @@
-#include "rNvs32.h"
-#include "rStrings.h"
 #include "project_config.h"
 #include <inttypes.h>
 #include <string.h>
 #include <stdio.h>
 #include "rLog.h"
+#include "rStrings.h"
+#include "reNvs.h"
 #include "sys/queue.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>

@@ -6,8 +6,8 @@
    kotyara12@yandex.ru | https://kotyara12.ru | tg: @kotyara1971
 */
 
-#ifndef __RNVS32_H__
-#define __RNVS32_H__
+#ifndef __RE_NVS_H__
+#define __RE_NVS_H__
 
 #include <stdio.h>
 #include <stdint.h>
@@ -39,4 +39,4 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
 }
 #endif
 
-#endif // __RNVS32_H__
+#endif // __RE_NVS_H__
