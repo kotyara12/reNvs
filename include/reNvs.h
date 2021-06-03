@@ -28,6 +28,7 @@ bool checkTimespan(time_t time, uint32_t timespan);
 
 char* value2string(const param_type_t type_value, void *value);
 void* string2value(const param_type_t type_value, char* str_value);
+void* clone2value(const param_type_t type_value, void *value);
 bool  equal2value(const param_type_t type_value, void *value1, void *value2);
 void  setNewValue(const param_type_t type_value, void *value1, void *value2);
 

@@ -174,6 +174,69 @@ void* string2value(const param_type_t type_value, char* str_value)
   return value;
 }
 
+void* clone2value(const param_type_t type_value, void *value)
+{
+  void* value2 = nullptr;
+  if (value) {
+    switch (type_value) {
+      case OPT_TYPE_I8:
+        value2 = malloc(sizeof(int8_t));
+        *(int8_t*)value2 = *(int8_t*)value;
+        break;
+      case OPT_TYPE_U8:
+        value2 = malloc(sizeof(uint8_t));
+        *(uint8_t*)value2 = *(uint8_t*)value;
+        break;
+      case OPT_TYPE_I16:
+        value2 = malloc(sizeof(int16_t));
+        *(int16_t*)value2 = *(int16_t*)value;
+        break;
+      case OPT_TYPE_U16:
+        value2 = malloc(sizeof(uint16_t));
+        *(uint16_t*)value2 = *(uint16_t*)value;
+        break;
+      case OPT_TYPE_I32:
+        value2 = malloc(sizeof(int32_t));
+        *(int32_t*)value2 = *(int32_t*)value;
+        break;
+      case OPT_TYPE_U32:
+        value2 = malloc(sizeof(uint32_t));
+        *(uint32_t*)value2 = *(uint32_t*)value;
+        break;
+      case OPT_TYPE_I64:
+        value2 = malloc(sizeof(int64_t));
+        *(int64_t*)value2 = *(int64_t*)value;
+        break;
+      case OPT_TYPE_U64:
+        value2 = malloc(sizeof(uint64_t));
+        *(uint64_t*)value2 = *(uint64_t*)value;
+        break;
+      case OPT_TYPE_FLOAT:
+        value2 = malloc(sizeof(float));
+        *(float*)value2 = *(float*)value;
+        break;
+      case OPT_TYPE_DOUBLE:
+        value2 = malloc(sizeof(double));
+        *(double*)value2 = *(double*)value;
+        break;
+      case OPT_TYPE_STRING:
+        value2 = strdup((char*)value);
+        break;
+      case OPT_TYPE_TIME:
+        value2 = malloc(sizeof(uint16_t));
+        *(uint16_t*)value2 = *(uint16_t*)value;
+        break;
+      case OPT_TYPE_TIMESPAN:
+        value2 = malloc(sizeof(uint32_t));
+        *(uint32_t*)value2 = *(uint32_t*)value;
+        break;
+      default:
+        break;
+    };
+  };
+  return value2;
+}
+
 bool equal2value(const param_type_t type_value, void *value1, void *value2)
 {
   if ((value1) && (value2)) {
