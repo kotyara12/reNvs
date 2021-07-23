@@ -1,17 +1,17 @@
-#include "project_config.h"
 #include <inttypes.h>
 #include <string.h>
 #include <stdio.h>
+#include "reNvs.h"
 #include "rLog.h"
 #include "rStrings.h"
-#include "reNvs.h"
-#include "sys/queue.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 #include <freertos/task.h>
+#include "sys/queue.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "nvs_handle.hpp"
+#include "project_config.h"
 
 static const char * tagNVS = "NVS";
 
