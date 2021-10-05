@@ -30,7 +30,7 @@ char* time2string(uint16_t time)
   return malloc_stringf(CONFIG_FORMAT_TIMEINT, time / 100, time % 100);
 }
 
-uint32_t string2timespan(const char* str_value)
+timespan_t string2timespan(const char* str_value)
 {
   uint h1, m1, h2, m2;
   char c1, c2, c3;
@@ -42,38 +42,15 @@ uint32_t string2timespan(const char* str_value)
   return 10000 * (100 * h1 + m1) + (100 * h2 + m2);
 }
 
-char* timespan2string(uint32_t timespan)
+char* timespan2string(timespan_t timespan)
 {
-  uint16_t t1 = timespan / 10000;
-  uint16_t t2 = timespan % 10000;
+  uint16_t t1 = 0;
+  uint16_t t2 = 0;
+  if (timespan > 0) {
+    t1 = timespan / 10000;
+    t2 = timespan % 10000;
+  };
   return malloc_stringf(CONFIG_FORMAT_TIMESPAN, t1 / 100, t1 % 100, t2 / 100, t2 % 100); 
-}
-
-bool checkTimespan(time_t time, uint32_t timespan)
-{
-  static struct tm ti; 
-  localtime_r(&time, &ti);
-  int16_t  t0 = ti.tm_hour * 100 + ti.tm_min;
-  uint16_t t1 = timespan / 10000;
-  uint16_t t2 = timespan % 10000;
-
-  // t1 < t2 :: ((t0 >= t1) && (t0 < t2))
-  // t0=0559 t1=0600 t2=2300 : (0559 >= 0600) && (0559 < 2300) = 0 && 1 = 0
-  // t0=0600 t1=0600 t2=2300 : (0600 >= 0600) && (0600 < 2300) = 1 && 1 = 1
-  // t0=0601 t1=0600 t2=2300 : (0601 >= 0600) && (0601 < 2300) = 1 && 1 = 1
-  // t0=2259 t1=0600 t2=2300 : (2259 >= 0600) && (2259 < 2300) = 1 && 1 = 1
-  // t0=2300 t1=0600 t2=2300 : (2300 >= 0600) && (2300 < 2300) = 1 && 0 = 0
-  // t0=2301 t1=0600 t2=2300 : (2301 >= 0600) && (2301 < 2300) = 1 && 0 = 0
-
-  // t1 > t2 :: !((t0 >= t2) && (t1 > t0))
-  // t0=2259 t1=2300 t2=0600 : (2259 >= 0600) && (2300 > 2259) = 1 && 1 = 1 !=> 0
-  // t0=2300 t1=2300 t2=0600 : (2300 >= 0600) && (2300 > 2300) = 1 && 0 = 0 !=> 1
-  // t0=2301 t1=2300 t2=0600 : (2301 >= 0600) && (2300 > 2301) = 1 && 0 = 0 !=> 1
-  // t0=0559 t1=2300 t2=0600 : (0559 >= 0600) && (2300 > 0559) = 0 && 1 = 0 !=> 1
-  // t0=0600 t1=2300 t2=0600 : (0600 >= 0600) && (2300 > 0600) = 1 && 1 = 1 !=> 0
-  // t0=0601 t1=2300 t2=0600 : (0601 >= 0600) && (2300 > 0601) = 1 && 1 = 1 !=> 0
-
-  return (t1 < t2) ? ((t0 >= t1) && (t0 < t2)) : !((t0 >= t2) && (t1 > t0));
 }
 
 char* value2string(const param_type_t type_value, void *value)

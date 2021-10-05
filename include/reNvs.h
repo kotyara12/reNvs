@@ -22,9 +22,8 @@ extern "C" {
 
 uint16_t string2time(const char* str_value);
 char* time2string(uint16_t time);
-uint32_t string2timespan(const char* str_value);
-char* timespan2string(uint32_t timespan);
-bool checkTimespan(time_t time, uint32_t timespan);
+timespan_t string2timespan(const char* str_value);
+char* timespan2string(timespan_t timespan);
 
 char* value2string(const param_type_t type_value, void *value);
 void* string2value(const param_type_t type_value, char* str_value);
