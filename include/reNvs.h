@@ -29,6 +29,7 @@ char* value2string(const param_type_t type_value, void *value);
 void* string2value(const param_type_t type_value, char* str_value);
 void* clone2value(const param_type_t type_value, void *value);
 bool  equal2value(const param_type_t type_value, void *value1, void *value2);
+bool  valueCheckLimits(const param_type_t type_value, void *value, void *value_min, void *value_max);
 void  setNewValue(const param_type_t type_value, void *value1, void *value2);
 
 bool nvsInit();

@@ -257,6 +257,34 @@ bool equal2value(const param_type_t type_value, void *value1, void *value2)
   };
 }
 
+bool valueCheckLimits(const param_type_t type_value, void *value, void *value_min, void *value_max)
+{
+  switch (type_value) {
+    case OPT_TYPE_I8:
+      return (!(value_min) || (*(int8_t*)value >= *(int8_t*)value_min)) && (!(value_max) || (*(int8_t*)value <= *(int8_t*)value_max));
+    case OPT_TYPE_U8:
+      return (!(value_min) || (*(uint8_t*)value >= *(uint8_t*)value_min)) && (!(value_max) || (*(uint8_t*)value <= *(uint8_t*)value_max));
+    case OPT_TYPE_I16:
+      return (!(value_min) || (*(int16_t*)value >= *(int16_t*)value_min)) && (!(value_max) || (*(int16_t*)value <= *(int16_t*)value_max));
+    case OPT_TYPE_U16:
+      return (!(value_min) || (*(uint16_t*)value >= *(uint16_t*)value_min)) && (!(value_max) || (*(uint16_t*)value <= *(uint16_t*)value_max));
+    case OPT_TYPE_I32:
+      return (!(value_min) || (*(int32_t*)value >= *(int32_t*)value_min)) && (!(value_max) || (*(int32_t*)value <= *(int32_t*)value_max));
+    case OPT_TYPE_U32:
+      return (!(value_min) || (*(uint32_t*)value >= *(uint32_t*)value_min)) && (!(value_max) || (*(uint32_t*)value <= *(uint32_t*)value_max));
+    case OPT_TYPE_I64:
+      return (!(value_min) || (*(int64_t*)value >= *(int64_t*)value_min)) && (!(value_max) || (*(int64_t*)value <= *(int64_t*)value_max));
+    case OPT_TYPE_U64:
+      return (!(value_min) || (*(uint64_t*)value >= *(uint64_t*)value_min)) && (!(value_max) || (*(uint64_t*)value <= *(uint64_t*)value_max));
+    case OPT_TYPE_FLOAT:
+      return (!(value_min) || (*(float*)value >= *(float*)value_min)) && (!(value_max) || (*(float*)value <= *(float*)value_max));
+    case OPT_TYPE_DOUBLE:
+      return (!(value_min) || (*(double*)value >= *(double*)value_min)) && (!(value_max) || (*(double*)value <= *(double*)value_max));
+    default:
+      return true;
+  };
+}
+
 void setNewValue(const param_type_t type_value, void *value1, void *value2)
 {
   switch (type_value) {
