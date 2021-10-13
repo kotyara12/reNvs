@@ -12,6 +12,7 @@
 #include "nvs_flash.h"
 #include "nvs_handle.hpp"
 #include "project_config.h"
+#include "def_consts.h"
 
 static const char * tagNVS = "NVS";
 
