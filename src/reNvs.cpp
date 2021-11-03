@@ -59,25 +59,25 @@ char* value2string(const param_type_t type_value, void *value)
   if (value) {
     switch (type_value) {
       case OPT_TYPE_I8:
-        return malloc_stringf("%d", *(int8_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_I8, *(int8_t*)value);
       case OPT_TYPE_U8:
-        return malloc_stringf("%d", *(uint8_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_U8, *(uint8_t*)value);
       case OPT_TYPE_I16:
-        return malloc_stringf("%d", *(int16_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_I16, *(int16_t*)value);
       case OPT_TYPE_U16:
-        return malloc_stringf("%d", *(uint16_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_U16, *(uint16_t*)value);
       case OPT_TYPE_I32:
-        return malloc_stringf("%d", *(int32_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_I32, *(int32_t*)value);
       case OPT_TYPE_U32:
-        return malloc_stringf("%d", *(uint32_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_U32, *(uint32_t*)value);
       case OPT_TYPE_I64:
-        return malloc_stringf("%d", *(int64_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_I64, *(int64_t*)value);
       case OPT_TYPE_U64:
-        return malloc_stringf("%d", *(uint64_t*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_U64, *(uint64_t*)value);
       case OPT_TYPE_FLOAT:
-        return malloc_stringf("%f", *(float*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_FLOAT, *(float*)value);
       case OPT_TYPE_DOUBLE:
-        return malloc_stringf("%f", *(double*)value);
+        return malloc_stringf(CONFIG_FORMAT_OPT_DOUBLE, *(double*)value);
       case OPT_TYPE_STRING:
         return strdup((char*)value);
       case OPT_TYPE_TIME:
