@@ -4,6 +4,7 @@
 #include "reNvs.h"
 #include "rLog.h"
 #include "rStrings.h"
+#include "reEsp32.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 #include <freertos/task.h>
@@ -96,55 +97,79 @@ void* string2value(const param_type_t type_value, char* str_value)
   void* value = nullptr;
   switch (type_value) {
     case OPT_TYPE_I8:
-      value = malloc(sizeof(int8_t));
-      *(int8_t*)value = (int8_t)strtoimax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(int8_t));
+      if (value) {
+        *(int8_t*)value = (int8_t)strtoimax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_U8:
-      value = malloc(sizeof(uint8_t));
-      *(uint8_t*)value = (uint8_t)strtoumax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(uint8_t));
+      if (value) {
+        *(uint8_t*)value = (uint8_t)strtoumax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_I16:
-      value = malloc(sizeof(int16_t));
-      *(int16_t*)value = (int16_t)strtoimax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(int16_t));
+      if (value) {
+        *(int16_t*)value = (int16_t)strtoimax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_U16:
-      value = malloc(sizeof(uint16_t));
-      *(uint16_t*)value = (uint16_t)strtoumax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(uint16_t));
+      if (value) {
+        *(uint16_t*)value = (uint16_t)strtoumax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_I32:
-      value = malloc(sizeof(int32_t));
-      *(int32_t*)value = (int32_t)strtoimax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(int32_t));
+      if (value) {
+        *(int32_t*)value = (int32_t)strtoimax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_U32:
-      value = malloc(sizeof(uint32_t));
-      *(uint32_t*)value = (uint32_t)strtoumax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(uint32_t));
+      if (value) {
+        *(uint32_t*)value = (uint32_t)strtoumax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_I64:
-      value = malloc(sizeof(int64_t));
-      *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(int64_t));
+      if (value) {
+        *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_U64:
-      value = malloc(sizeof(uint64_t));
-      *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+      value = esp_malloc(sizeof(uint64_t));
+      if (value) {
+        *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+      };
       break;
     case OPT_TYPE_FLOAT:
-      value = malloc(sizeof(float));
-      *(float*)value = (float)strtof(str_value, nullptr);
+      value = esp_malloc(sizeof(float));
+      if (value) {
+        *(float*)value = (float)strtof(str_value, nullptr);
+      };
       break;
     case OPT_TYPE_DOUBLE:
-      value = malloc(sizeof(double));
-      *(double*)value = (double)strtod(str_value, nullptr);
+      value = esp_malloc(sizeof(double));
+      if (value) {
+        *(double*)value = (double)strtod(str_value, nullptr);
+      };
       break;
     case OPT_TYPE_STRING:
       value = strdup(str_value);
       break;
     case OPT_TYPE_TIME:
-      value = malloc(sizeof(uint16_t));
-      *(uint16_t*)value = string2time(str_value);
+      value = esp_malloc(sizeof(uint16_t));
+      if (value) {
+        *(uint16_t*)value = string2time(str_value);
+      };
       break;
     case OPT_TYPE_TIMESPAN:
-      value = malloc(sizeof(uint32_t));
-      *(uint32_t*)value = string2timespan(str_value);
+      value = esp_malloc(sizeof(uint32_t));
+      if (value) {
+        *(uint32_t*)value = string2timespan(str_value);
+      };
       break;
     default:
       return nullptr;
@@ -158,55 +183,79 @@ void* clone2value(const param_type_t type_value, void *value)
   if (value) {
     switch (type_value) {
       case OPT_TYPE_I8:
-        value2 = malloc(sizeof(int8_t));
-        *(int8_t*)value2 = *(int8_t*)value;
+        value2 = esp_malloc(sizeof(int8_t));
+        if (value) {
+          *(int8_t*)value2 = *(int8_t*)value;
+        };
         break;
       case OPT_TYPE_U8:
-        value2 = malloc(sizeof(uint8_t));
-        *(uint8_t*)value2 = *(uint8_t*)value;
+        value2 = esp_malloc(sizeof(uint8_t));
+        if (value) {
+          *(uint8_t*)value2 = *(uint8_t*)value;
+        };
         break;
       case OPT_TYPE_I16:
-        value2 = malloc(sizeof(int16_t));
-        *(int16_t*)value2 = *(int16_t*)value;
+        value2 = esp_malloc(sizeof(int16_t));
+        if (value) {
+          *(int16_t*)value2 = *(int16_t*)value;
+        };
         break;
       case OPT_TYPE_U16:
-        value2 = malloc(sizeof(uint16_t));
-        *(uint16_t*)value2 = *(uint16_t*)value;
+        value2 = esp_malloc(sizeof(uint16_t));
+        if (value) {
+          *(uint16_t*)value2 = *(uint16_t*)value;
+        };
         break;
       case OPT_TYPE_I32:
-        value2 = malloc(sizeof(int32_t));
-        *(int32_t*)value2 = *(int32_t*)value;
+        value2 = esp_malloc(sizeof(int32_t));
+        if (value) {
+          *(int32_t*)value2 = *(int32_t*)value;
+        };
         break;
       case OPT_TYPE_U32:
-        value2 = malloc(sizeof(uint32_t));
-        *(uint32_t*)value2 = *(uint32_t*)value;
+        value2 = esp_malloc(sizeof(uint32_t));
+        if (value) {
+          *(uint32_t*)value2 = *(uint32_t*)value;
+        };
         break;
       case OPT_TYPE_I64:
-        value2 = malloc(sizeof(int64_t));
-        *(int64_t*)value2 = *(int64_t*)value;
+        value2 = esp_malloc(sizeof(int64_t));
+        if (value) {
+          *(int64_t*)value2 = *(int64_t*)value;
+        };
         break;
       case OPT_TYPE_U64:
-        value2 = malloc(sizeof(uint64_t));
-        *(uint64_t*)value2 = *(uint64_t*)value;
+        value2 = esp_malloc(sizeof(uint64_t));
+        if (value) {
+          *(uint64_t*)value2 = *(uint64_t*)value;
+        };
         break;
       case OPT_TYPE_FLOAT:
-        value2 = malloc(sizeof(float));
-        *(float*)value2 = *(float*)value;
+        value2 = esp_malloc(sizeof(float));
+        if (value) {
+          *(float*)value2 = *(float*)value;
+        };
         break;
       case OPT_TYPE_DOUBLE:
-        value2 = malloc(sizeof(double));
-        *(double*)value2 = *(double*)value;
+        value2 = esp_malloc(sizeof(double));
+        if (value) {
+          *(double*)value2 = *(double*)value;
+        };
         break;
       case OPT_TYPE_STRING:
         value2 = strdup((char*)value);
         break;
       case OPT_TYPE_TIME:
-        value2 = malloc(sizeof(uint16_t));
-        *(uint16_t*)value2 = *(uint16_t*)value;
+        value2 = esp_malloc(sizeof(uint16_t));
+        if (value) {
+          *(uint16_t*)value2 = *(uint16_t*)value;
+        };
         break;
       case OPT_TYPE_TIMESPAN:
-        value2 = malloc(sizeof(uint32_t));
-        *(uint32_t*)value2 = *(uint32_t*)value;
+        value2 = esp_malloc(sizeof(uint32_t));
+        if (value) {
+          *(uint32_t*)value2 = *(uint32_t*)value;
+        };
         break;
       default:
         break;
@@ -260,79 +309,83 @@ bool equal2value(const param_type_t type_value, void *value1, void *value2)
 
 bool valueCheckLimits(const param_type_t type_value, void *value, void *value_min, void *value_max)
 {
-  switch (type_value) {
-    case OPT_TYPE_I8:
-      return (!(value_min) || (*(int8_t*)value >= *(int8_t*)value_min)) && (!(value_max) || (*(int8_t*)value <= *(int8_t*)value_max));
-    case OPT_TYPE_U8:
-      return (!(value_min) || (*(uint8_t*)value >= *(uint8_t*)value_min)) && (!(value_max) || (*(uint8_t*)value <= *(uint8_t*)value_max));
-    case OPT_TYPE_I16:
-      return (!(value_min) || (*(int16_t*)value >= *(int16_t*)value_min)) && (!(value_max) || (*(int16_t*)value <= *(int16_t*)value_max));
-    case OPT_TYPE_U16:
-      return (!(value_min) || (*(uint16_t*)value >= *(uint16_t*)value_min)) && (!(value_max) || (*(uint16_t*)value <= *(uint16_t*)value_max));
-    case OPT_TYPE_I32:
-      return (!(value_min) || (*(int32_t*)value >= *(int32_t*)value_min)) && (!(value_max) || (*(int32_t*)value <= *(int32_t*)value_max));
-    case OPT_TYPE_U32:
-      return (!(value_min) || (*(uint32_t*)value >= *(uint32_t*)value_min)) && (!(value_max) || (*(uint32_t*)value <= *(uint32_t*)value_max));
-    case OPT_TYPE_I64:
-      return (!(value_min) || (*(int64_t*)value >= *(int64_t*)value_min)) && (!(value_max) || (*(int64_t*)value <= *(int64_t*)value_max));
-    case OPT_TYPE_U64:
-      return (!(value_min) || (*(uint64_t*)value >= *(uint64_t*)value_min)) && (!(value_max) || (*(uint64_t*)value <= *(uint64_t*)value_max));
-    case OPT_TYPE_FLOAT:
-      return (!(value_min) || (*(float*)value >= *(float*)value_min)) && (!(value_max) || (*(float*)value <= *(float*)value_max));
-    case OPT_TYPE_DOUBLE:
-      return (!(value_min) || (*(double*)value >= *(double*)value_min)) && (!(value_max) || (*(double*)value <= *(double*)value_max));
-    default:
-      return true;
+  if ((value) && (value_min) && (value_max)) {
+    switch (type_value) {
+      case OPT_TYPE_I8:
+        return (!(value_min) || (*(int8_t*)value >= *(int8_t*)value_min)) && (!(value_max) || (*(int8_t*)value <= *(int8_t*)value_max));
+      case OPT_TYPE_U8:
+        return (!(value_min) || (*(uint8_t*)value >= *(uint8_t*)value_min)) && (!(value_max) || (*(uint8_t*)value <= *(uint8_t*)value_max));
+      case OPT_TYPE_I16:
+        return (!(value_min) || (*(int16_t*)value >= *(int16_t*)value_min)) && (!(value_max) || (*(int16_t*)value <= *(int16_t*)value_max));
+      case OPT_TYPE_U16:
+        return (!(value_min) || (*(uint16_t*)value >= *(uint16_t*)value_min)) && (!(value_max) || (*(uint16_t*)value <= *(uint16_t*)value_max));
+      case OPT_TYPE_I32:
+        return (!(value_min) || (*(int32_t*)value >= *(int32_t*)value_min)) && (!(value_max) || (*(int32_t*)value <= *(int32_t*)value_max));
+      case OPT_TYPE_U32:
+        return (!(value_min) || (*(uint32_t*)value >= *(uint32_t*)value_min)) && (!(value_max) || (*(uint32_t*)value <= *(uint32_t*)value_max));
+      case OPT_TYPE_I64:
+        return (!(value_min) || (*(int64_t*)value >= *(int64_t*)value_min)) && (!(value_max) || (*(int64_t*)value <= *(int64_t*)value_max));
+      case OPT_TYPE_U64:
+        return (!(value_min) || (*(uint64_t*)value >= *(uint64_t*)value_min)) && (!(value_max) || (*(uint64_t*)value <= *(uint64_t*)value_max));
+      case OPT_TYPE_FLOAT:
+        return (!(value_min) || (*(float*)value >= *(float*)value_min)) && (!(value_max) || (*(float*)value <= *(float*)value_max));
+      case OPT_TYPE_DOUBLE:
+        return (!(value_min) || (*(double*)value >= *(double*)value_min)) && (!(value_max) || (*(double*)value <= *(double*)value_max));
+      default:
+        return true;
+    };
   };
+  return false;
 }
 
 void setNewValue(const param_type_t type_value, void *value1, void *value2)
 {
-  switch (type_value) {
-    case OPT_TYPE_I8:
-      *(int8_t*)value1 = *(int8_t*)value2;
-      return;
-    case OPT_TYPE_U8:
-      *(uint8_t*)value1 = *(uint8_t*)value2;
-      return;
-    case OPT_TYPE_I16:
-      *(int16_t*)value1 = *(int16_t*)value2;
-      return;
-    case OPT_TYPE_U16:
-      *(uint16_t*)value1 = *(uint16_t*)value2;
-      return;
-    case OPT_TYPE_I32:
-      *(int32_t*)value1 = *(int32_t*)value2;
-      return;
-    case OPT_TYPE_U32:
-      *(uint32_t*)value1 = *(uint32_t*)value2;
-      return;
-    case OPT_TYPE_I64:
-      *(int64_t*)value1 = *(int64_t*)value2;
-      return;
-    case OPT_TYPE_U64:
-      *(uint64_t*)value1 = *(uint64_t*)value2;
-      return;
-    case OPT_TYPE_FLOAT:
-      *(float*)value1 = *(float*)value2;
-      return;
-    case OPT_TYPE_DOUBLE:
-      *(double*)value1 = *(double*)value2;
-      return;
-    case OPT_TYPE_STRING:
-      if (value1) free(value1);
-      value1 = strdup((char*)value2);
-      return;
-    case OPT_TYPE_TIME:
-      *(uint16_t*)value1 = *(uint16_t*)value2;
-      return;
-    case OPT_TYPE_TIMESPAN:
-      *(uint32_t*)value1 = *(uint32_t*)value2;
-      return;
-    default:
-      return;
+  if ((value1) && (value2)) {
+    switch (type_value) {
+      case OPT_TYPE_I8:
+        *(int8_t*)value1 = *(int8_t*)value2;
+        return;
+      case OPT_TYPE_U8:
+        *(uint8_t*)value1 = *(uint8_t*)value2;
+        return;
+      case OPT_TYPE_I16:
+        *(int16_t*)value1 = *(int16_t*)value2;
+        return;
+      case OPT_TYPE_U16:
+        *(uint16_t*)value1 = *(uint16_t*)value2;
+        return;
+      case OPT_TYPE_I32:
+        *(int32_t*)value1 = *(int32_t*)value2;
+        return;
+      case OPT_TYPE_U32:
+        *(uint32_t*)value1 = *(uint32_t*)value2;
+        return;
+      case OPT_TYPE_I64:
+        *(int64_t*)value1 = *(int64_t*)value2;
+        return;
+      case OPT_TYPE_U64:
+        *(uint64_t*)value1 = *(uint64_t*)value2;
+        return;
+      case OPT_TYPE_FLOAT:
+        *(float*)value1 = *(float*)value2;
+        return;
+      case OPT_TYPE_DOUBLE:
+        *(double*)value1 = *(double*)value2;
+        return;
+      case OPT_TYPE_STRING:
+        if (value1) free(value1);
+        value1 = strdup((char*)value2);
+        return;
+      case OPT_TYPE_TIME:
+        *(uint16_t*)value1 = *(uint16_t*)value2;
+        return;
+      case OPT_TYPE_TIMESPAN:
+        *(uint32_t*)value1 = *(uint32_t*)value2;
+        return;
+      default:
+        return;
+    };
   };
-
 }
 
 bool nvsInit()
@@ -396,7 +449,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
       if (new_len != old_len) {
         // Let's save the pointer to the previous data for now (in case of failure)
         prev_value = (char*)value;
-        value = malloc(new_len);
+        value = esp_malloc(new_len);
       };
       // Reading a line from storage
       err = nvs_get_str(nvs_handle, name_key, (char*)value, &new_len);
