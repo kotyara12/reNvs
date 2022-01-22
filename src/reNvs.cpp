@@ -309,7 +309,7 @@ bool equal2value(const param_type_t type_value, void *value1, void *value2)
 
 bool valueCheckLimits(const param_type_t type_value, void *value, void *value_min, void *value_max)
 {
-  if ((value) && (value_min) && (value_max)) {
+  if (value) {
     switch (type_value) {
       case OPT_TYPE_I8:
         return (!(value_min) || (*(int8_t*)value >= *(int8_t*)value_min)) && (!(value_max) || (*(int8_t*)value <= *(int8_t*)value_max));
