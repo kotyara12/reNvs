@@ -12,7 +12,6 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "nvs_handle.hpp"
-#include "esp_timer.h"
 #include "project_config.h"
 #include "def_consts.h"
 
@@ -425,15 +424,19 @@ bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nv
 
 bool nvsRead(const char* name_group, const char* name_key, const param_type_t type_value, void * value)
 {
-  nvs_handle_t nvs_handle;
-  // Open NVS namespace
-  if (!nvsOpen(name_group, NVS_READONLY, &nvs_handle)) return false;
-
-  // Check null value
+  // Check values
+  if (!name_key) {
+    rlog_e(logTAG, "Failed to read value: name_key is NULL!");
+    return false;
+  };
   if (!value) {
     rlog_e(logTAG, "Failed to read NULL value!");
     return false;
   };
+
+  nvs_handle_t nvs_handle;
+  // Open NVS namespace
+  if (!nvsOpen(name_group, NVS_READONLY, &nvs_handle)) return false;
 
   // Read value
   esp_err_t err = ESP_OK;
@@ -548,53 +551,21 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
   return (err == ESP_OK || err == ESP_ERR_NVS_NOT_FOUND);
 }
 
-#if defined(CONFIG_NVS_DELAY_COMMIT_US) && (CONFIG_NVS_DELAY_COMMIT_US > 0) 
-
-static esp_timer_handle_t _nvsCommitTimer = nullptr;
-
-static void nvsCommitTimerEnd(void* arg)
-{
-  esp_err_t err = nvs_commit((nvs_handle_t)arg);
-  if (err == ESP_OK) {
-    rlog_d(logTAG, "Successfully commit to NVS storage");
-  } else {
-    rlog_e(logTAG, "Failed commit to NVS storage: %d (%s)", err, esp_err_to_name(err));
-  };
-  esp_timer_delete(_nvsCommitTimer);
-  _nvsCommitTimer = nullptr;
-}
-
-bool nvsCommitTimerStart(nvs_handle_t nvs_handle)
-{
-  if (_nvsCommitTimer) {
-    if (esp_timer_is_active(_nvsCommitTimer)) {
-      RE_OK_CHECK(logTAG, esp_timer_stop(_nvsCommitTimer), return false);
-    };
-  } else {
-    esp_timer_create_args_t cfgTimer;
-    memset(&cfgTimer, 0, sizeof(cfgTimer));
-    cfgTimer.name = "nvs_commit";
-    cfgTimer.callback = nvsCommitTimerEnd;
-    cfgTimer.arg = (void*)nvs_handle;
-    RE_OK_CHECK(logTAG, esp_timer_create(&cfgTimer, &_nvsCommitTimer), return false);
-  };
-  
-  RE_OK_CHECK(logTAG, esp_timer_start_once(_nvsCommitTimer, CONFIG_NVS_DELAY_COMMIT_US), return false);
-  return true;
-}
-#endif // CONFIG_NVS_DELAY_COMMIT_US
-
 bool nvsWrite(const char* name_group, const char* name_key, const param_type_t type_value, void * value)
 {
-  nvs_handle_t nvs_handle;
-  // Open NVS namespace
-  if (!nvsOpen(name_group, NVS_READWRITE, &nvs_handle)) return false;
-
-  // Check null value
+  // Check values
+  if (!name_key) {
+    rlog_e(logTAG, "Failed to write value: name_key is NULL!");
+    return false;
+  };
   if (!value) {
     rlog_e(logTAG, "Failed to write NULL value!");
     return false;
   };
+
+  nvs_handle_t nvs_handle;
+  // Open NVS namespace
+  if (!nvsOpen(name_group, NVS_READWRITE, &nvs_handle)) return false;
 
   // Write value
   esp_err_t err = ESP_OK;
@@ -644,13 +615,7 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
   };
 
   if (err == ESP_OK) {
-    #if defined(CONFIG_NVS_DELAY_COMMIT_US) && (CONFIG_NVS_DELAY_COMMIT_US > 0) 
-      if (!nvsCommitTimerStart(nvs_handle)) {
-        err = nvs_commit(nvs_handle);  
-      };
-    #else
-      err = nvs_commit(nvs_handle);
-    #endif // CONFIG_NVS_DELAY_COMMIT_US
+    err = nvs_commit(nvs_handle);
   };
 
   #if CONFIG_RLOG_PROJECT_LEVEL >= RLOG_LEVEL_ERROR
