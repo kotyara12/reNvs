@@ -12,10 +12,11 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "nvs_handle.hpp"
+#include "esp_timer.h"
 #include "project_config.h"
 #include "def_consts.h"
 
-static const char * tagNVS = "NVS";
+static const char * logTAG = "NVS";
 
 uint16_t string2time(const char* str_value)
 {
@@ -95,84 +96,86 @@ char* value2string(const param_type_t type_value, void *value)
 void* string2value(const param_type_t type_value, char* str_value)
 {
   void* value = nullptr;
-  switch (type_value) {
-    case OPT_TYPE_I8:
-      value = esp_malloc(sizeof(int8_t));
-      if (value) {
-        *(int8_t*)value = (int8_t)strtoimax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_U8:
-      value = esp_malloc(sizeof(uint8_t));
-      if (value) {
-        *(uint8_t*)value = (uint8_t)strtoumax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_I16:
-      value = esp_malloc(sizeof(int16_t));
-      if (value) {
-        *(int16_t*)value = (int16_t)strtoimax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_U16:
-      value = esp_malloc(sizeof(uint16_t));
-      if (value) {
-        *(uint16_t*)value = (uint16_t)strtoumax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_I32:
-      value = esp_malloc(sizeof(int32_t));
-      if (value) {
-        *(int32_t*)value = (int32_t)strtoimax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_U32:
-      value = esp_malloc(sizeof(uint32_t));
-      if (value) {
-        *(uint32_t*)value = (uint32_t)strtoumax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_I64:
-      value = esp_malloc(sizeof(int64_t));
-      if (value) {
-        *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_U64:
-      value = esp_malloc(sizeof(uint64_t));
-      if (value) {
-        *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
-      };
-      break;
-    case OPT_TYPE_FLOAT:
-      value = esp_malloc(sizeof(float));
-      if (value) {
-        *(float*)value = (float)strtof(str_value, nullptr);
-      };
-      break;
-    case OPT_TYPE_DOUBLE:
-      value = esp_malloc(sizeof(double));
-      if (value) {
-        *(double*)value = (double)strtod(str_value, nullptr);
-      };
-      break;
-    case OPT_TYPE_STRING:
-      value = strdup(str_value);
-      break;
-    case OPT_TYPE_TIME:
-      value = esp_malloc(sizeof(uint16_t));
-      if (value) {
-        *(uint16_t*)value = string2time(str_value);
-      };
-      break;
-    case OPT_TYPE_TIMESPAN:
-      value = esp_malloc(sizeof(uint32_t));
-      if (value) {
-        *(uint32_t*)value = string2timespan(str_value);
-      };
-      break;
-    default:
-      return nullptr;
+  if (str_value) {
+    switch (type_value) {
+      case OPT_TYPE_I8:
+        value = esp_malloc(sizeof(int8_t));
+        if (value) {
+          *(int8_t*)value = (int8_t)strtoimax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_U8:
+        value = esp_malloc(sizeof(uint8_t));
+        if (value) {
+          *(uint8_t*)value = (uint8_t)strtoumax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_I16:
+        value = esp_malloc(sizeof(int16_t));
+        if (value) {
+          *(int16_t*)value = (int16_t)strtoimax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_U16:
+        value = esp_malloc(sizeof(uint16_t));
+        if (value) {
+          *(uint16_t*)value = (uint16_t)strtoumax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_I32:
+        value = esp_malloc(sizeof(int32_t));
+        if (value) {
+          *(int32_t*)value = (int32_t)strtoimax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_U32:
+        value = esp_malloc(sizeof(uint32_t));
+        if (value) {
+          *(uint32_t*)value = (uint32_t)strtoumax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_I64:
+        value = esp_malloc(sizeof(int64_t));
+        if (value) {
+          *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_U64:
+        value = esp_malloc(sizeof(uint64_t));
+        if (value) {
+          *(uint64_t*)value = (uint64_t)strtoumax(str_value, nullptr, 0);
+        };
+        break;
+      case OPT_TYPE_FLOAT:
+        value = esp_malloc(sizeof(float));
+        if (value) {
+          *(float*)value = (float)strtof(str_value, nullptr);
+        };
+        break;
+      case OPT_TYPE_DOUBLE:
+        value = esp_malloc(sizeof(double));
+        if (value) {
+          *(double*)value = (double)strtod(str_value, nullptr);
+        };
+        break;
+      case OPT_TYPE_STRING:
+        value = strdup(str_value);
+        break;
+      case OPT_TYPE_TIME:
+        value = esp_malloc(sizeof(uint16_t));
+        if (value) {
+          *(uint16_t*)value = string2time(str_value);
+        };
+        break;
+      case OPT_TYPE_TIMESPAN:
+        value = esp_malloc(sizeof(uint32_t));
+        if (value) {
+          *(uint32_t*)value = string2timespan(str_value);
+        };
+        break;
+      default:
+        return nullptr;
+    };
   };
   return value;
 }
@@ -392,16 +395,16 @@ bool nvsInit()
 {
   esp_err_t err = nvs_flash_init();
   if ((err == ESP_ERR_NVS_NO_FREE_PAGES) || (err == ESP_ERR_NVS_NEW_VERSION_FOUND)) {
-    rlog_i(tagNVS, "Erasing NVS partition...");
+    rlog_i(logTAG, "Erasing NVS partition...");
     nvs_flash_erase();
     err = nvs_flash_init();
   };
   if (err != ESP_OK) {
-    rlog_e(tagNVS, "NVS partition initialization error: %d (%s)", err, esp_err_to_name(err));
+    rlog_e(logTAG, "NVS partition initialization error: %d (%s)", err, esp_err_to_name(err));
     return false;
   }
   else {
-    rlog_i(tagNVS, "NVS partition initilized");
+    rlog_i(logTAG, "NVS partition initilized");
     return true;
   };
 }
@@ -411,9 +414,9 @@ bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nv
   esp_err_t err = nvs_open(name_group, open_mode, nvs_handle); 
   if (err != ESP_OK) {
     if (err == ESP_ERR_NVS_NOT_FOUND) {
-      rlog_w(tagNVS, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
+      rlog_w(logTAG, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
     } else {
-      rlog_e(tagNVS, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
+      rlog_e(logTAG, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
     };
     return false;
   };
@@ -426,18 +429,24 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
   // Open NVS namespace
   if (!nvsOpen(name_group, NVS_READONLY, &nvs_handle)) return false;
 
+  // Check null value
+  if (!value) {
+    rlog_e(logTAG, "Failed to read NULL value!");
+    return false;
+  };
+
   // Read value
   esp_err_t err = ESP_OK;
   if (type_value == OPT_TYPE_STRING) {
     // Get the size of the string that is in the storage
     size_t new_len = 0;
-    err = nvs_get_str(nvs_handle, name_key, NULL, &new_len);
+    err = nvs_get_str(nvs_handle, name_key, nullptr, &new_len);
     if (err == ESP_ERR_NVS_NOT_FOUND) {
-      rlog_d(tagNVS, "Value \"%s.%s\" is not initialized yet, used default: [%s]", name_group, name_key, (char*)value);
+      rlog_d(logTAG, "Value \"%s.%s\" is not initialized yet, used default: [%s]", name_group, name_key, (char*)value);
     }
     else {
       if (err != ESP_OK) {
-        rlog_w(tagNVS, "Error reading string \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
+        rlog_w(logTAG, "Error reading string \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
       };
     }
 
@@ -458,7 +467,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
         if (prev_value) {
           free(prev_value);
         };
-        rlog_d(tagNVS, "Read string value \"%s.%s\": [%s]", name_group, name_key, (char*)value);
+        rlog_d(logTAG, "Read string value \"%s.%s\": [%s]", name_group, name_key, (char*)value);
       } else {
         // We delete the allocated memory for new data and return the previous value
         if (prev_value) {
@@ -466,7 +475,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
           value = prev_value;
           prev_value = nullptr;
         };
-        rlog_e(tagNVS, "Error reading string \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
+        rlog_e(logTAG, "Error reading string \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
       };
     };
   } else {
@@ -515,29 +524,77 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
         break;
     };
     
-    char* str_value = value2string(type_value, value);
-    switch (err) {
-      case ESP_OK:
-        rlog_d(tagNVS, "Read value \"%s.%s\": [%s]", name_group, name_key, str_value);
-        break;
-      case ESP_ERR_NVS_NOT_FOUND:
-        rlog_d(tagNVS, "Value \"%s.%s\" is not initialized yet, used default: [%s]", name_group, name_key, str_value);
-        break;
-      default :
-        rlog_e(tagNVS, "Error reading \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
-    };
-    free(str_value);
+    #if CONFIG_RLOG_PROJECT_LEVEL >= RLOG_LEVEL_ERROR
+      if (name_group && name_key) {
+        char* str_value = value2string(type_value, value);
+        RE_MEM_CHECK(logTAG, str_value, return true);
+        switch (err) {
+          case ESP_OK:
+            rlog_d(logTAG, "Read value \"%s.%s\": [%s]", name_group, name_key, str_value);
+            break;
+          case ESP_ERR_NVS_NOT_FOUND:
+            rlog_d(logTAG, "Value \"%s.%s\" is not initialized yet, used default: [%s]", name_group, name_key, str_value);
+            break;
+          default :
+            rlog_e(logTAG, "Error reading \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
+            break;
+        };
+        free(str_value);
+      };
+    #endif // CONFIG_RLOG_PROJECT_LEVEL
   };
 
   nvs_close(nvs_handle);
   return (err == ESP_OK || err == ESP_ERR_NVS_NOT_FOUND);
 }
 
+#if defined(CONFIG_NVS_DELAY_COMMIT_US) && (CONFIG_NVS_DELAY_COMMIT_US > 0) 
+
+static esp_timer_handle_t _nvsCommitTimer = nullptr;
+
+static void nvsCommitTimerEnd(void* arg)
+{
+  esp_err_t err = nvs_commit((nvs_handle_t)arg);
+  if (err == ESP_OK) {
+    rlog_d(logTAG, "Successfully commit to NVS storage");
+  } else {
+    rlog_e(logTAG, "Failed commit to NVS storage: %d (%s)", err, esp_err_to_name(err));
+  };
+  esp_timer_delete(_nvsCommitTimer);
+  _nvsCommitTimer = nullptr;
+}
+
+bool nvsCommitTimerStart(nvs_handle_t nvs_handle)
+{
+  if (_nvsCommitTimer) {
+    if (esp_timer_is_active(_nvsCommitTimer)) {
+      RE_OK_CHECK(logTAG, esp_timer_stop(_nvsCommitTimer), return false);
+    };
+  } else {
+    esp_timer_create_args_t cfgTimer;
+    memset(&cfgTimer, 0, sizeof(cfgTimer));
+    cfgTimer.name = "nvs_commit";
+    cfgTimer.callback = nvsCommitTimerEnd;
+    cfgTimer.arg = (void*)nvs_handle;
+    RE_OK_CHECK(logTAG, esp_timer_create(&cfgTimer, &_nvsCommitTimer), return false);
+  };
+  
+  RE_OK_CHECK(logTAG, esp_timer_start_once(_nvsCommitTimer, CONFIG_NVS_DELAY_COMMIT_US), return false);
+  return true;
+}
+#endif // CONFIG_NVS_DELAY_COMMIT_US
+
 bool nvsWrite(const char* name_group, const char* name_key, const param_type_t type_value, void * value)
 {
   nvs_handle_t nvs_handle;
   // Open NVS namespace
   if (!nvsOpen(name_group, NVS_READWRITE, &nvs_handle)) return false;
+
+  // Check null value
+  if (!value) {
+    rlog_e(logTAG, "Failed to write NULL value!");
+    return false;
+  };
 
   // Write value
   esp_err_t err = ESP_OK;
@@ -587,15 +644,25 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
   };
 
   if (err == ESP_OK) {
-    err = nvs_commit(nvs_handle);
+    #if defined(CONFIG_NVS_DELAY_COMMIT_US) && (CONFIG_NVS_DELAY_COMMIT_US > 0) 
+      if (!nvsCommitTimerStart(nvs_handle)) {
+        err = nvs_commit(nvs_handle);  
+      };
+    #else
+      err = nvs_commit(nvs_handle);
+    #endif // CONFIG_NVS_DELAY_COMMIT_US
   };
 
-  if (err == ESP_OK) {
-    rlog_d(tagNVS, "Value \"%s.%s\" was successfully written to storage", name_group, name_key);
-  }
-  else {
-    rlog_e(tagNVS, "Error writting \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
-  };
+  #if CONFIG_RLOG_PROJECT_LEVEL >= RLOG_LEVEL_ERROR
+    if (name_group && name_key) {
+      if (err == ESP_OK) {
+        rlog_d(logTAG, "Value \"%s.%s\" was successfully written to storage", name_group, name_key);
+      }
+      else {
+        rlog_e(logTAG, "Error writting \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));
+      };
+    };
+  #endif // CONFIG_RLOG_PROJECT_LEVEL
 
   nvs_close(nvs_handle);
   return (err == ESP_OK);
