@@ -390,22 +390,26 @@ void setNewValue(const param_type_t type_value, void *value1, void *value2)
   };
 }
 
+static bool _nvsInit = false;
+
 bool nvsInit()
 {
-  esp_err_t err = nvs_flash_init();
-  if ((err == ESP_ERR_NVS_NO_FREE_PAGES) || (err == ESP_ERR_NVS_NEW_VERSION_FOUND)) {
-    rlog_i(logTAG, "Erasing NVS partition...");
-    nvs_flash_erase();
-    err = nvs_flash_init();
+  if (!_nvsInit) {
+    esp_err_t err = nvs_flash_init();
+    if ((err == ESP_ERR_NVS_NO_FREE_PAGES) || (err == ESP_ERR_NVS_NEW_VERSION_FOUND)) {
+      rlog_i(logTAG, "Erasing NVS partition...");
+      nvs_flash_erase();
+      err = nvs_flash_init();
+    };
+    if (err == ESP_OK) {
+      _nvsInit = true;
+      rlog_i(logTAG, "NVS partition initilized");
+    }
+    else {
+      rlog_e(logTAG, "NVS partition initialization error: %d (%s)", err, esp_err_to_name(err));
+    };
   };
-  if (err != ESP_OK) {
-    rlog_e(logTAG, "NVS partition initialization error: %d (%s)", err, esp_err_to_name(err));
-    return false;
-  }
-  else {
-    rlog_i(logTAG, "NVS partition initilized");
-    return true;
-  };
+  return _nvsInit;
 }
 
 bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nvs_handle)

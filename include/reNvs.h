@@ -33,6 +33,7 @@ bool  valueCheckLimits(const param_type_t type_value, void *value, void *value_m
 void  setNewValue(const param_type_t type_value, void *value1, void *value2);
 
 bool nvsInit();
+bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nvs_handle);
 bool nvsRead(const char* name_group, const char* name_key, const param_type_t type_value, void * value);
 bool nvsWrite(const char* name_group, const char* name_key, const param_type_t type_value, void * value);
 
