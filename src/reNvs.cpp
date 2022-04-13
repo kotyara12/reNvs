@@ -534,7 +534,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
     #if CONFIG_RLOG_PROJECT_LEVEL >= RLOG_LEVEL_ERROR
       if (name_group && name_key) {
         char* str_value = value2string(type_value, value);
-        RE_MEM_CHECK(logTAG, str_value, return true);
+        RE_MEM_CHECK(str_value, return true);
         switch (err) {
           case ESP_OK:
             rlog_d(logTAG, "Read value \"%s.%s\": [%s]", name_group, name_key, str_value);
