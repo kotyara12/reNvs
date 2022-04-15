@@ -81,7 +81,7 @@ char* value2string(const param_type_t type_value, void *value)
         return malloc_stringf(CONFIG_FORMAT_OPT_DOUBLE, *(double*)value);
       case OPT_TYPE_STRING:
         return strdup((char*)value);
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         return time2string(*(uint16_t*)value);;
       case OPT_TYPE_TIMESPAN:
         return timespan2string(*(uint32_t*)value);
@@ -160,7 +160,7 @@ void* string2value(const param_type_t type_value, char* str_value)
       case OPT_TYPE_STRING:
         value = strdup(str_value);
         break;
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         value = esp_malloc(sizeof(uint16_t));
         if (value) {
           *(uint16_t*)value = string2time(str_value);
@@ -247,7 +247,7 @@ void* clone2value(const param_type_t type_value, void *value)
       case OPT_TYPE_STRING:
         value2 = strdup((char*)value);
         break;
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         value2 = esp_malloc(sizeof(uint16_t));
         if (value) {
           *(uint16_t*)value2 = *(uint16_t*)value;
@@ -292,7 +292,7 @@ bool equal2value(const param_type_t type_value, void *value1, void *value2)
         return *(double*)value1 == *(double*)value2;
       case OPT_TYPE_STRING:
         return strcmp((char*)value1, (char*)value2) == 0;
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         return *(uint16_t*)value1 == *(uint16_t*)value2;
       case OPT_TYPE_TIMESPAN:
         return *(uint32_t*)value1 == *(uint32_t*)value2;
@@ -378,7 +378,7 @@ void setNewValue(const param_type_t type_value, void *value1, void *value2)
         if (value1) free(value1);
         value1 = strdup((char*)value2);
         return;
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         *(uint16_t*)value1 = *(uint16_t*)value2;
         return;
       case OPT_TYPE_TIMESPAN:
@@ -520,7 +520,7 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
         data_len = sizeof(double);
         err = nvs_get_blob(nvs_handle, name_key, (double*)value, &data_len);
         break;
-      case OPT_TYPE_TIME:
+      case OPT_TYPE_TIMEVAL:
         err = nvs_get_u16(nvs_handle, name_key, (uint16_t*)value);
         break;
       case OPT_TYPE_TIMESPAN:
@@ -607,7 +607,7 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
     case OPT_TYPE_STRING:
       err = nvs_set_str(nvs_handle, name_key, (char*)value);
       break;
-    case OPT_TYPE_TIME:
+    case OPT_TYPE_TIMEVAL:
       err = nvs_set_u16(nvs_handle, name_key, *(uint16_t*)value);
       break;
     case OPT_TYPE_TIMESPAN:
