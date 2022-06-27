@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "reNvs.h"
 #include "rLog.h"
+#include "rTypes.h"
 #include "rStrings.h"
 #include "reEsp32.h"
 #include <freertos/FreeRTOS.h>
@@ -16,6 +17,66 @@
 #include "def_consts.h"
 
 static const char * logTAG = "NVS";
+
+esp_err_t nvs_set_float(nvs_handle_t c_handle, const char* key, float in_value)
+{
+  uint32_t buf = 0;
+  memcpy(&buf, &in_value, sizeof(float));
+  return nvs_set_u32(c_handle, key, buf);
+}
+
+esp_err_t nvs_get_float(nvs_handle_t c_handle, const char* key, float* out_value)
+{
+  uint32_t buf = 0;
+  esp_err_t err = nvs_get_u32(c_handle, key, &buf);
+  if (err == ESP_OK) {
+    memcpy(out_value, &buf, sizeof(float));
+  } else {
+    size_t _old_mode_size = sizeof(float);
+    err = nvs_get_blob(c_handle, key, out_value, &_old_mode_size);
+  };
+  return err;
+}
+
+esp_err_t nvs_set_double(nvs_handle_t c_handle, const char* key, double in_value)
+{
+  uint64_t buf = 0;
+  memcpy(&buf, &in_value, sizeof(double));
+  return nvs_set_u64(c_handle, key, buf);
+}
+
+esp_err_t nvs_get_double(nvs_handle_t c_handle, const char* key, double* out_value)
+{
+  uint64_t buf = 0;
+  esp_err_t err = nvs_get_u64(c_handle, key, &buf);
+  if (err == ESP_OK) {
+    memcpy(out_value, &buf, sizeof(double));
+  } else {
+    size_t _old_mode_size = sizeof(double);
+    err = nvs_get_blob(c_handle, key, out_value, &_old_mode_size);
+  };
+  return err;
+}
+
+esp_err_t nvs_set_time(nvs_handle_t c_handle, const char* key, time_t in_value)
+{
+  uint64_t buf = 0;
+  memcpy(&buf, &in_value, sizeof(time_t));
+  return nvs_set_u64(c_handle, key, buf);
+}
+
+esp_err_t nvs_get_time(nvs_handle_t c_handle, const char* key, time_t* out_value)
+{
+  uint64_t buf = 0;
+  esp_err_t err = nvs_get_u64(c_handle, key, &buf);
+  if (err == ESP_OK) {
+    memcpy(out_value, &buf, sizeof(time_t));
+  } else {
+    size_t _old_mode_size = sizeof(time_t);
+    err = nvs_get_blob(c_handle, key, out_value, &_old_mode_size);
+  };
+  return err;
+}
 
 uint16_t string2time(const char* str_value)
 {
@@ -416,9 +477,7 @@ bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nv
 {
   esp_err_t err = nvs_open(name_group, open_mode, nvs_handle); 
   if (err != ESP_OK) {
-    if (err == ESP_ERR_NVS_NOT_FOUND) {
-      rlog_w(logTAG, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
-    } else {
+    if (err != ESP_ERR_NVS_NOT_FOUND) {
       rlog_e(logTAG, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
     };
     return false;
@@ -486,7 +545,6 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
       };
     };
   } else {
-    size_t data_len = 0;
     switch (type_value) {
       case OPT_TYPE_I8:
         err = nvs_get_i8(nvs_handle, name_key, (int8_t*)value);
@@ -513,12 +571,10 @@ bool nvsRead(const char* name_group, const char* name_key, const param_type_t ty
         err = nvs_get_u64(nvs_handle, name_key, (uint64_t*)value);
         break;
       case OPT_TYPE_FLOAT:
-        data_len = sizeof(float);
-        err = nvs_get_blob(nvs_handle, name_key, (float*)value, &data_len);
+        err = nvs_get_float(nvs_handle, name_key, (float*)value);
         break;
       case OPT_TYPE_DOUBLE:
-        data_len = sizeof(double);
-        err = nvs_get_blob(nvs_handle, name_key, (double*)value, &data_len);
+        err = nvs_get_double(nvs_handle, name_key, (double*)value);
         break;
       case OPT_TYPE_TIMEVAL:
         err = nvs_get_u16(nvs_handle, name_key, (uint16_t*)value);
@@ -599,10 +655,10 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
       err = nvs_set_u64(nvs_handle, name_key, *(uint64_t*)value);
       break;
     case OPT_TYPE_FLOAT:
-      err = nvs_set_blob(nvs_handle, name_key, value, sizeof(float));
+      err = nvs_set_float(nvs_handle, name_key, *(float*)value);
       break;
     case OPT_TYPE_DOUBLE:
-      err = nvs_set_blob(nvs_handle, name_key, value, sizeof(double));
+      err = nvs_set_double(nvs_handle, name_key, *(double*)value);
       break;
     case OPT_TYPE_STRING:
       err = nvs_set_str(nvs_handle, name_key, (char*)value);
@@ -625,7 +681,7 @@ bool nvsWrite(const char* name_group, const char* name_key, const param_type_t t
   #if CONFIG_RLOG_PROJECT_LEVEL >= RLOG_LEVEL_ERROR
     if (name_group && name_key) {
       if (err == ESP_OK) {
-        rlog_d(logTAG, "Value \"%s.%s\" was successfully written to storage", name_group, name_key);
+        rlog_i(logTAG, "Value \"%s.%s\" was successfully written to storage", name_group, name_key);
       }
       else {
         rlog_e(logTAG, "Error writting \"%s.%s\": %d (%s)!", name_group, name_key, err, esp_err_to_name(err));

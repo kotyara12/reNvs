@@ -20,6 +20,13 @@
 extern "C" {
 #endif
 
+esp_err_t nvs_set_float(nvs_handle_t c_handle, const char* key, float in_value);
+esp_err_t nvs_get_float(nvs_handle_t c_handle, const char* key, float* out_value);
+esp_err_t nvs_set_double(nvs_handle_t c_handle, const char* key, double in_value);
+esp_err_t nvs_get_double(nvs_handle_t c_handle, const char* key, double* out_value);
+esp_err_t nvs_set_time(nvs_handle_t c_handle, const char* key, time_t in_value);
+esp_err_t nvs_get_time(nvs_handle_t c_handle, const char* key, time_t* out_value);
+
 uint16_t string2time(const char* str_value);
 char* time2string(uint16_t time);
 timespan_t string2timespan(const char* str_value);
