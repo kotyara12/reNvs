@@ -100,15 +100,19 @@ timespan_t string2timespan(const char* str_value)
   sscanf(str_value, CONFIG_FORMAT_TIMESPAN_SCAN, &h1, &c1, &m1, &c2, &h2, &c3, &m2);
   if (h1>23) h1=23;
   if (m1>59) m1=59;
-  if (h2>23) h2=23;
-  if (m2>59) m2=59;
+  if (h2>24) {
+    h2=24;
+    m2=0;
+  } else {
+    if (m2>59) m2=59;
+  };
   return 10000 * (100 * h1 + m1) + (100 * h2 + m2);
 }
 
 char* timespan2string(timespan_t timespan)
 {
-  uint16_t t1 = 0;
-  uint16_t t2 = 0;
+  uint32_t t1 = 0;
+  uint32_t t2 = 0;
   if (timespan > 0) {
     t1 = timespan / 10000;
     t2 = timespan % 10000;
@@ -143,9 +147,9 @@ char* value2string(const param_type_t type_value, void *value)
       case OPT_TYPE_STRING:
         return strdup((char*)value);
       case OPT_TYPE_TIMEVAL:
-        return time2string(*(uint16_t*)value);;
+        return time2string(*(uint16_t*)value);
       case OPT_TYPE_TIMESPAN:
-        return timespan2string(*(uint32_t*)value);
+        return timespan2string(*(timespan_t*)value);
       default:
         return nullptr;
     };
@@ -230,7 +234,7 @@ void* string2value(const param_type_t type_value, char* str_value)
       case OPT_TYPE_TIMESPAN:
         value = esp_malloc(sizeof(uint32_t));
         if (value) {
-          *(uint32_t*)value = string2timespan(str_value);
+          *(timespan_t*)value = string2timespan(str_value);
         };
         break;
       default:
@@ -315,9 +319,9 @@ void* clone2value(const param_type_t type_value, void *value)
         };
         break;
       case OPT_TYPE_TIMESPAN:
-        value2 = esp_malloc(sizeof(uint32_t));
+        value2 = esp_malloc(sizeof(timespan_t));
         if (value) {
-          *(uint32_t*)value2 = *(uint32_t*)value;
+          *(timespan_t*)value2 = *(timespan_t*)value;
         };
         break;
       default:
@@ -356,7 +360,7 @@ bool equal2value(const param_type_t type_value, void *value1, void *value2)
       case OPT_TYPE_TIMEVAL:
         return *(uint16_t*)value1 == *(uint16_t*)value2;
       case OPT_TYPE_TIMESPAN:
-        return *(uint32_t*)value1 == *(uint32_t*)value2;
+        return *(timespan_t*)value1 == *(timespan_t*)value2;
       default:
         return false;
     };
@@ -443,7 +447,7 @@ void setNewValue(const param_type_t type_value, void *value1, void *value2)
         *(uint16_t*)value1 = *(uint16_t*)value2;
         return;
       case OPT_TYPE_TIMESPAN:
-        *(uint32_t*)value1 = *(uint32_t*)value2;
+        *(timespan_t*)value1 = *(timespan_t*)value2;
         return;
       default:
         return;
