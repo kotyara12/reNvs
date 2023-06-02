@@ -16,7 +16,9 @@
 #include "project_config.h"
 #include "def_consts.h"
 
+#if CONFIG_RLOG_PROJECT_LEVEL > RLOG_LEVEL_NONE
 static const char * logTAG = "NVS";
+#endif // CONFIG_RLOG_PROJECT_LEVEL
 
 esp_err_t nvs_set_float(nvs_handle_t c_handle, const char* key, float in_value)
 {
