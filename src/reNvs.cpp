@@ -483,7 +483,7 @@ bool nvsOpen(const char* name_group, nvs_open_mode_t open_mode, nvs_handle_t *nv
 {
   esp_err_t err = nvs_open(name_group, open_mode, nvs_handle); 
   if (err != ESP_OK) {
-    if (err != ESP_ERR_NVS_NOT_FOUND) {
+    if (!((err == ESP_ERR_NVS_NOT_FOUND) && (open_mode == NVS_READONLY))) {
       rlog_e(logTAG, "Error opening NVS namespace \"%s\": %d (%s)!", name_group, err, esp_err_to_name(err));
     };
     return false;
